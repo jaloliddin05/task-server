@@ -27,11 +27,13 @@ export class Product {
   @Column({type: 'timestamp', default: () => 'NOW()' })
   date: string
 
-  @OneToOne(()=>FileEntity, file=>file.product)
+  @OneToOne(()=>FileEntity, file=>file.product, {
+    onDelete:"SET NULL"
+  })
   @JoinColumn()
   url: FileEntity
 
-  @ManyToOne(()=>Type, type=>type,{
+  @ManyToOne(()=>Type, type=>type.products,{
     onDelete:"CASCADE",
     cascade:true
   })

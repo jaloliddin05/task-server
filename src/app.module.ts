@@ -22,7 +22,7 @@ import { ProductModule } from './modules/product/product.module';
       inject: [ConfigService],
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: join(process.cwd(), 'uploads'),
     }),
     FileModule,
     ProductModule,

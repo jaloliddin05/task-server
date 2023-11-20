@@ -16,7 +16,7 @@ export class FileService {
     const url =
       request.protocol +
       '://' +
-      request.hostname + ":4000/"+
+      request.hostname + ":4000"+
       file.path.split('uploads')[1];
     const path = file.path;
 
@@ -43,7 +43,7 @@ export class FileService {
     const url =
       request.protocol +
       '://' +
-      request.hostname + ":4000/"+
+      request.hostname + ":4000"+
       file.path.split('uploads')[1];
     const path = file.path;
 

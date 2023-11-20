@@ -59,7 +59,7 @@ export class ProductController {
     description: 'The type was created successfully',
   })
   @UseInterceptors(
-    FileInterceptor('avatar', {
+    FileInterceptor('url', {
       storage: MulterStorage('uploads/image/product'),
     }),
   )
@@ -77,6 +77,11 @@ export class ProductController {
   @ApiOkResponse({
     description: 'product was changed',
   })
+  @UseInterceptors(
+    FileInterceptor('url', {
+      storage: MulterStorage('uploads/image/product'),
+    }),
+  )
   @HttpCode(HttpStatus.OK)
   async changeData(
     @Body() data: UpdateProductDto,

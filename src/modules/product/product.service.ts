@@ -18,7 +18,14 @@ export class ProductService {
   ) {}
 
   async getAll() {
-    const data = await this.typeRepository.find();
+    const data = await this.typeRepository.find({
+      relations:{
+        url:true
+      },
+      order:{
+        date:"DESC"
+      }
+    });
     return data;
   }
 
@@ -39,6 +46,7 @@ export class ProductService {
   }
 
   async deleteOne(id: string) {
+    await this.deleteImage(id)
     const response = await this.typeRepository.delete(id).catch(() => {
       throw new NotFoundException('data not found');
     });

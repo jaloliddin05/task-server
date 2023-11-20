@@ -23,6 +23,11 @@ export class TypeService {
     const data = await this.typeRepository
       .findOne({
         where: { id },
+        relations:{
+          products:{
+            url:true
+          }
+        }
       })
       .catch(() => {
         throw new NotFoundException('data not found');

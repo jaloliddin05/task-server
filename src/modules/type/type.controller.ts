@@ -64,7 +64,7 @@ export class TypeController {
   async changeData(
     @Body() data: UpdateTypeDto,
     @Param('id') id: string,
-  ) {
+  ) {    
     return await this.typeService.change(
       data,
       id
