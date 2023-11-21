@@ -26,6 +26,14 @@ class UpdateProductDto {
   readonly address: string;
 
   @ApiProperty({
+    description: `type`,
+    example: 'uuid',
+  })
+  @IsOptional()
+  @IsString()
+  type
+
+  @ApiProperty({
     description: `Product image`,
     example: 'file',
     type: 'string',

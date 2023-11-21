@@ -12,25 +12,25 @@ Injectable();
 export class ProductService {
   constructor(
     @InjectRepository(Product)
-    private readonly typeRepository: Repository<Product>,
+    private readonly productRepository: Repository<Product>,
     private readonly fileService: FileService,
     private readonly typeService: TypeService,
   ) {}
 
   async getAll() {
-    const data = await this.typeRepository.find({
-      relations:{
-        url:true
+    const data = await this.productRepository.find({
+      relations: {
+        url: true,
       },
-      order:{
-        date:"DESC"
-      }
+      order: {
+        date: 'DESC',
+      },
     });
     return data;
   }
 
   async getOne(id: string) {
-    const data = await this.typeRepository
+    const data = await this.productRepository
       .findOne({
         where: { id },
         relations: {
@@ -45,35 +45,62 @@ export class ProductService {
     return data;
   }
 
+  async getByType(id:string) {
+    const data = await this.productRepository.find({
+      relations: {
+        url: true,
+      },
+      order: {
+        date: 'DESC',
+      },
+      where:{
+        type:{
+          id
+        }
+      }
+    });
+    return data;
+  }
+
   async deleteOne(id: string) {
-    await this.deleteImage(id)
-    const response = await this.typeRepository.delete(id).catch(() => {
+    await this.deleteImage(id);
+    const response = await this.productRepository.delete(id).catch(() => {
       throw new NotFoundException('data not found');
     });
 
     return response;
   }
 
-  async change(value: UpdateProductDto, id: string,file: Express.Multer.File, req) {
-
-    if(file){
-      value.url = await this.updateImage(file,id,req)
-    }
+  async change(
+    value: UpdateProductDto,
+    id: string,
+    file: Express.Multer.File,
+    req,
+  ) {
     
-    await this.typeRepository.update({ id }, value);
+    if (file) {
+      value.url = await this.updateImage(file, id, req);
+    }
+    if(value.type){
+      value.type = await this.typeService.getById(value.type);
+    }
+
+    await this.productRepository.update({ id }, value);
     return await this.getOne(id);
   }
 
   async create(value: CreateProductDto, file: Express.Multer.File, req) {
-
-    const type = await this.typeService.getOne(value.type);
-
-    if(file){
-      value.url = await this.uploadImage(file,req)
+    if(value.type){
+      value.type = await this.typeService.getById(value.type);
     }
 
-    const data = this.typeRepository.create({...value,type});
-    return await this.typeRepository.save(data);
+    if (file) {
+      value.url = await this.uploadImage(file, req);
+    }
+
+    const data = this.productRepository.create({ ...value });
+
+    return await this.productRepository.save(data);
   }
 
   async uploadImage(file: Express.Multer.File, request) {
@@ -83,7 +110,7 @@ export class ProductService {
 
   async updateImage(file: Express.Multer.File, id: string, request) {
     const data = await this.getOne(id);
-    const url = await this.fileService.updateFile(data.url.id, file, request);
+    const url = await this.fileService.updateFile(data?.url?.id, file, request);
     return url;
   }
 

@@ -29,9 +29,9 @@ class CreateProductDto {
     description: `type`,
     example: 'uuid',
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  type:string
+  type
 
   @ApiProperty({
     description: `Product image`,

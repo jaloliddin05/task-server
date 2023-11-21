@@ -52,6 +52,16 @@ export class ProductController {
     return this.productService.getOne(id);
   }
 
+  @Get('/type/:id')
+  @ApiOperation({ summary: 'Method: returns products by type' })
+  @ApiOkResponse({
+    description: 'The products was returned successfully',
+  })
+  @HttpCode(HttpStatus.OK)
+  async getByType(@Param('id') id: string): Promise<Product[]> {
+    return this.productService.getByType(id);
+  }
+
   @Post('/')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Method: creates new type' })
@@ -68,7 +78,7 @@ export class ProductController {
     @Body() data: CreateProductDto,
     @UploadedFile(FileUploadValidationForUpdate) file: Express.Multer.File,
     @Req() req,
-  ) {
+  ) {    
     return await this.productService.create(data, file, req);
   }
 

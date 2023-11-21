@@ -36,6 +36,18 @@ export class TypeService {
     return data
   }
 
+  async getById(id: string) {
+    const data = await this.typeRepository
+      .findOne({
+        where: { id },
+      })
+      .catch(() => {
+        throw new NotFoundException('data not found');
+      });
+
+    return data
+  }
+
   async deleteOne(id: string) {
     const response = await this.typeRepository.delete(id).catch(() => {
       throw new NotFoundException('data not found');
