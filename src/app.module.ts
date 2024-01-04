@@ -30,3 +30,5 @@ import { ProductModule } from './modules/product/product.module';
   ],
 })
 export class AppModule {}
+console.log('');
+
